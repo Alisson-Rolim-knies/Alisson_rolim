@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de controle financeiro para vistorias veiculares - Página de Relatórios">
+    <title>Relatórios - Controle Financeiro</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF e html2canvas para exportação de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-car-side text-orange me-2"></i>
+                Controle de Vistorias
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="vistorias.html">
+                            <i class="fas fa-clipboard-check me-1"></i> Vistorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="depositos.html">
+                            <i class="fas fa-money-bill-wave me-1"></i> Depósitos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="despesas.html">
+                            <i class="fas fa-file-invoice-dollar me-1"></i> Despesas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resumo-diario.html">
+                            <i class="fas fa-calendar-day me-1"></i> Resumo Diário
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resumo-mensal.html">
+                            <i class="fas fa-calendar-alt me-1"></i> Resumo Mensal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="relatorios.html">
+                            <i class="fas fa-chart-bar me-1"></i> Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="btnLogout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container mt-4">
+        <h1 class="mb-4">Relatórios Financeiros</h1>
+
+        <!-- Seleção de tipo de relatório -->
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Tipo de Relatório</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tipoRelatorio" id="relatorioDiario" value="diario" checked>
+                            <label class="form-check-label" for="relatorioDiario">
+                                Relatório Diário
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tipoRelatorio" id="relatorioMensal" value="mensal">
+                            <label class="form-check-label" for="relatorioMensal">
+                                Relatório Mensal
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6" id="dataDiariaContainer">
+                        <label for="dataRelatorio" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="dataRelatorio">
+                    </div>
+                    <div class="col-md-6 d-none" id="dataMensalContainer">
+                        <label for="mesRelatorio" class="form-label">Mês</label>
+                        <input type="month" class="form-control" id="mesRelatorio">
+                    </div>
+                    <div class="col-md-6 text-end align-self-end">
+                        <button class="btn btn-orange" id="btnGerarRelatorio">
+                            <i class="fas fa-sync-alt me-1"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatório -->
+        <div class="card mb-4 border-0 shadow-sm" id="relatorioCard">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Relatório Financeiro</h5>
+                <button class="btn btn-sm btn-light" id="btnExportarPDF">
+                    <i class="fas fa-file-pdf me-1"></i> Exportar PDF
+                </button>
+            </div>
+            <div class="card-body" id="relatorioContent">
+                <div class="text-center py-5" id="relatorioLoader">
+                    <div class="loader"></div>
+                    <p>Gerando relatório...</p>
+                </div>
+                
+                <div id="relatorioData" class="d-none">
+                    <!-- Cabeçalho do relatório -->
+                    <div class="report-header text-center mb-4">
+                        <h3>Relatório Financeiro</h3>
+                        <p class="lead" id="relatorioPeriodo">Período: </p>
+                    </div>
+                    
+                    <!-- Resumo financeiro -->
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h4>Resumo Financeiro</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Descrição</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total em PIX</td>
+                                            <td id="relatorioTotalPix">R$ 0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total em Dinheiro</td>
+                                            <td id="relatorioTotalDinheiro">R$ 0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Depositado</td>
+                                            <td id="relatorioTotalDepositado">R$ 0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Despesas</td>
+                                            <td id="relatorioTotalDespesas">R$ 0,00</td>
+                                        </tr>
+                                        <tr class="table-active">
+                                            <td><strong>Total do Período</strong></td>
+                                            <td id="relatorioTotalPeriodo"><strong>R$ 0,00</strong></td>
+                                        </tr>
+                                        <tr class="table-warning">
+                                            <td><strong>Falta Depositar</strong></td>
+                                            <td id="relatorioFaltaDepositar"><strong>R$ 0,00</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráficos -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-4">
+                            <h4>Distribuição de Receitas</h4>
+                            <div class="chart-container" style="position: relative; height:300px;">
+                                <canvas id="graficoReceitas"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h4>Vistorias por Tipo de Veículo</h4>
+                            <div class="chart-container" style="position: relative; height:300px;">
+                                <canvas id="graficoVistorias"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalhamento -->
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <h4>Detalhamento de Vistorias</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Tipo de Veículo</th>
+                                            <th>Valor</th>
+                                            <th>Método de Pagamento</th>
+                                            <th>Valor PIX</th>
+                                            <th>Valor Dinheiro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaVistorias">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <h4>Detalhamento de Depósitos</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Valor</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaDepositos">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <h4>Detalhamento de Despesas</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Valor</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaDespesas">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="relatorioEmpty" class="text-center py-5 d-none">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <p>Nenhum dado encontrado para o período selecionado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para notificações toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 Controle Financeiro de Vistorias Veiculares</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- Scripts personalizados -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/relatorios.js"></script>
+</body>
+</html>

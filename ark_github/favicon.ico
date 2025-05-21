@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Favicon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="#FF6600" cx="100" cy="100" r="100"></circle>
+        <path d="M50,120 L150,120 C155.523,120 160,124.477 160,130 L160,140 C160,145.523 155.523,150 150,150 L50,150 C44.4771525,150 40,145.523 40,140 L40,130 C40,124.477 44.4771525,120 50,120 Z" fill="#FFFFFF"></path>
+        <path d="M60,70 L140,70 C145.523,70 150,74.4771525 150,80 L150,110 C150,115.523 145.523,120 140,120 L60,120 C54.4771525,120 50,115.523 50,110 L50,80 C50,74.4771525 54.4771525,70 60,70 Z" fill="#FFFFFF"></path>
+        <circle fill="#FF6600" cx="70" cy="95" r="10"></circle>
+        <circle fill="#FF6600" cx="130" cy="95" r="10"></circle>
+        <path d="M50,50 L150,50 L140,70 L60,70 L50,50 Z" fill="#FFFFFF"></path>
+    </g>
+</svg>

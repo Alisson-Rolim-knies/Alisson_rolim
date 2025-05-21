@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300px" height="200px" viewBox="0 0 300 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Car Inspection</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Fundo do carro -->
+        <path d="M50,120 C50,100 70,90 100,90 L200,90 C230,90 250,100 250,120 L250,150 C250,160 240,170 230,170 L70,170 C60,170 50,160 50,150 L50,120 Z" fill="#212529"></path>
+        
+        <!-- Janelas -->
+        <path d="M80,90 L100,60 L200,60 L220,90 L80,90 Z" fill="#FFFFFF" opacity="0.8"></path>
+        
+        <!-- Rodas -->
+        <circle fill="#333333" cx="90" cy="170" r="20"></circle>
+        <circle fill="#FFFFFF" cx="90" cy="170" r="10"></circle>
+        <circle fill="#333333" cx="210" cy="170" r="20"></circle>
+        <circle fill="#FFFFFF" cx="210" cy="170" r="10"></circle>
+        
+        <!-- Faróis -->
+        <circle fill="#FFCC00" cx="60" cy="110" r="10"></circle>
+        <circle fill="#FFCC00" cx="240" cy="110" r="10"></circle>
+        
+        <!-- Prancheta de vistoria -->
+        <rect fill="#FFFFFF" x="120" y="30" width="80" height="100" rx="5"></rect>
+        <rect fill="#FF6600" x="130" y="40" width="60" height="10" rx="2"></rect>
+        <rect fill="#FF6600" x="130" y="60" width="60" height="5" rx="2"></rect>
+        <rect fill="#FF6600" x="130" y="75" width="60" height="5" rx="2"></rect>
+        <rect fill="#FF6600" x="130" y="90" width="60" height="5" rx="2"></rect>
+        <rect fill="#FF6600" x="130" y="105" width="30" height="5" rx="2"></rect>
+        
+        <!-- Marca de verificação -->
+        <path d="M150,120 L160,130 L180,110" stroke="#FF6600" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+</svg>

@@ -1,0 +1,183 @@
+/* Cores principais */
+:root {
+    --orange: #FF6600;
+    --dark: #212529;
+    --light: #FFFFFF;
+}
+
+/* Classe para texto laranja */
+.text-orange {
+    color: var(--orange) !important;
+}
+
+/* Botão laranja */
+.btn-orange {
+    background-color: var(--orange);
+    border-color: var(--orange);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-orange:hover, .btn-orange:focus, .btn-orange:active {
+    background-color: #e65c00;
+    border-color: #e65c00;
+    color: white;
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+}
+
+/* Cards do dashboard */
+.dashboard-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagem de boas-vindas */
+.welcome-image {
+    max-height: 300px;
+}
+
+/* Tabelas */
+.table-actions {
+    width: 120px;
+    text-align: center;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Formulários */
+.form-control:focus, .form-select:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+}
+
+/* Navbar */
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--orange);
+}
+
+.navbar-dark .navbar-brand:hover {
+    color: var(--orange);
+}
+
+/* Paginação */
+.page-item.active .page-link {
+    background-color: var(--orange);
+    border-color: var(--orange);
+}
+
+.page-link {
+    color: var(--orange);
+}
+
+.page-link:hover {
+    color: #e65c00;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .welcome-image {
+        margin-top: 2rem;
+    }
+    
+    .dashboard-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Loader */
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--orange);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toasts de notificação */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.toast-header {
+    background-color: var(--orange);
+    color: white;
+}
+
+.toast {
+    background-color: white;
+    border-left: 4px solid var(--orange);
+}
+
+/* Relatórios */
+.report-card {
+    border-left: 4px solid var(--orange);
+}
+
+.report-header {
+    margin-bottom: 2rem;
+}
+
+/* Modais */
+.modal-header {
+    border-bottom: 3px solid var(--orange);
+}
+
+.modal-content {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Impressão */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    body {
+        font-size: 12pt;
+    }
+    
+    .report-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .navbar, .footer, .btn {
+        display: none !important;
+    }
+}

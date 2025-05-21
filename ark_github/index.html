@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de controle financeiro para vistorias veiculares">
+    <title>Controle Financeiro de Vistorias</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-car-side text-orange me-2"></i>
+                Controle de Vistorias
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Links visíveis apenas quando logado -->
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/vistorias.html">
+                            <i class="fas fa-clipboard-check me-1"></i> Vistorias
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/depositos.html">
+                            <i class="fas fa-money-bill-wave me-1"></i> Depósitos
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/despesas.html">
+                            <i class="fas fa-file-invoice-dollar me-1"></i> Despesas
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/resumo-diario.html">
+                            <i class="fas fa-calendar-day me-1"></i> Resumo Diário
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/resumo-mensal.html">
+                            <i class="fas fa-calendar-alt me-1"></i> Resumo Mensal
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="pages/relatorios.html">
+                            <i class="fas fa-chart-bar me-1"></i> Relatórios
+                        </a>
+                    </li>
+                    <!-- Links de autenticação -->
+                    <li class="nav-item auth-not-required">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item auth-not-required">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">
+                            <i class="fas fa-user-plus me-1"></i> Cadastro
+                        </a>
+                    </li>
+                    <li class="nav-item auth-required d-none">
+                        <a class="nav-link" href="#" id="btnLogout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container mt-5">
+        <!-- Seção de boas-vindas (visível para todos) -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h1 class="display-4">Controle Financeiro de <span class="text-orange">Vistorias Veiculares</span></h1>
+                <p class="lead">Gerencie suas vistorias, depósitos e despesas de forma simples e eficiente.</p>
+                <hr class="my-4">
+                <p>Faça login ou cadastre-se para começar a usar o sistema.</p>
+                <div class="auth-not-required">
+                    <button class="btn btn-orange btn-lg me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </button>
+                    <button class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#signupModal">
+                        <i class="fas fa-user-plus me-1"></i> Cadastro
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="assets/img/car-inspection.svg" alt="Vistoria Veicular" class="img-fluid welcome-image">
+            </div>
+        </div>
+
+        <!-- Dashboard (visível apenas quando logado) -->
+        <div class="auth-required d-none">
+            <h2 class="mb-4">Dashboard</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card dashboard-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clipboard-check fa-3x text-orange mb-3"></i>
+                            <h5 class="card-title">Vistorias</h5>
+                            <p class="card-text" id="dashboardVistorias">Carregando...</p>
+                            <a href="pages/vistorias.html" class="btn btn-sm btn-orange">Gerenciar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card dashboard-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-money-bill-wave fa-3x text-orange mb-3"></i>
+                            <h5 class="card-title">Depósitos</h5>
+                            <p class="card-text" id="dashboardDepositos">Carregando...</p>
+                            <a href="pages/depositos.html" class="btn btn-sm btn-orange">Gerenciar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card dashboard-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-file-invoice-dollar fa-3x text-orange mb-3"></i>
+                            <h5 class="card-title">Despesas</h5>
+                            <p class="card-text" id="dashboardDespesas">Carregando...</p>
+                            <a href="pages/despesas.html" class="btn btn-sm btn-orange">Gerenciar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card dashboard-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-bar fa-3x text-orange mb-3"></i>
+                            <h5 class="card-title">Relatórios</h5>
+                            <p class="card-text">Análise financeira</p>
+                            <a href="pages/relatorios.html" class="btn btn-sm btn-orange">Visualizar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumo financeiro do dia -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Resumo Financeiro (Hoje)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><strong>Total em PIX:</strong> <span id="resumoPix">R$ 0,00</span></p>
+                                    <p><strong>Total em Dinheiro:</strong> <span id="resumoDinheiro">R$ 0,00</span></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>Total Depositado:</strong> <span id="resumoDepositado">R$ 0,00</span></p>
+                                    <p><strong>Total Despesas:</strong> <span id="resumoDespesas">R$ 0,00</span></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>Total do Dia:</strong> <span id="resumoTotal">R$ 0,00</span></p>
+                                    <p><strong>Falta Depositar:</strong> <span id="resumoFaltaDepositar">R$ 0,00</span></p>
+                                    <p><strong>Vistorias Realizadas:</strong> <span id="resumoVistoriasHoje">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="pages/resumo-diario.html" class="btn btn-sm btn-orange">
+                                <i class="fas fa-calendar-day me-1"></i> Ver resumo diário detalhado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumo financeiro do mês -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Resumo Financeiro (Mês Atual)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><strong>Total em PIX:</strong> <span id="resumoPixMes">R$ 0,00</span></p>
+                                    <p><strong>Total em Dinheiro:</strong> <span id="resumoDinheiroMes">R$ 0,00</span></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>Total Depositado:</strong> <span id="resumoDepositadoMes">R$ 0,00</span></p>
+                                    <p><strong>Total Despesas:</strong> <span id="resumoDespesasMes">R$ 0,00</span></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><strong>Total do Mês:</strong> <span id="resumoTotalMes">R$ 0,00</span></p>
+                                    <p><strong>Falta Depositar:</strong> <span id="resumoFaltaDepositarMes">R$ 0,00</span></p>
+                                    <p><strong>Vistorias Realizadas:</strong> <span id="resumoVistoriasMes">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="pages/resumo-mensal.html" class="btn btn-sm btn-orange">
+                                <i class="fas fa-calendar-alt me-1"></i> Ver resumo mensal detalhado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="loginError"></div>
+                        <button type="submit" class="btn btn-orange w-100">Entrar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-center w-100">Não tem uma conta? 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Cadastre-se</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Cadastro</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="signupEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPassword" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="signupPassword" required>
+                            <div class="form-text">A senha deve ter pelo menos 6 caracteres.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPasswordConfirm" class="form-label">Confirmar Senha</label>
+                            <input type="password" class="form-control" id="signupPasswordConfirm" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="signupError"></div>
+                        <button type="submit" class="btn btn-orange w-100">Cadastrar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-center w-100">Já tem uma conta? 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Faça login</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para notificações toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 Controle Financeiro de Vistorias Veiculares</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- Scripts personalizados -->
+    <script src="js/utils.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

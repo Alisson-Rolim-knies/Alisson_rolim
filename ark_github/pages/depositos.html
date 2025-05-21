@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de controle financeiro para vistorias veiculares - Página de Depósitos">
+    <title>Depósitos - Controle Financeiro</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-car-side text-orange me-2"></i>
+                Controle de Vistorias
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="vistorias.html">
+                            <i class="fas fa-clipboard-check me-1"></i> Vistorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="depositos.html">
+                            <i class="fas fa-money-bill-wave me-1"></i> Depósitos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="despesas.html">
+                            <i class="fas fa-file-invoice-dollar me-1"></i> Despesas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html">
+                            <i class="fas fa-chart-bar me-1"></i> Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="btnLogout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Gerenciar Depósitos</h1>
+            <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#addDepositoModal">
+                <i class="fas fa-plus me-1"></i> Novo Depósito
+            </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Filtros</h5>
+            </div>
+            <div class="card-body">
+                <form id="filterForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="filterDataInicio" class="form-label">Data Inicial</label>
+                        <input type="date" class="form-control" id="filterDataInicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="filterDataFim" class="form-label">Data Final</label>
+                        <input type="date" class="form-control" id="filterDataFim">
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-secondary me-2" id="btnClearFilters">Limpar</button>
+                        <button type="submit" class="btn btn-orange">Filtrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabela de Depósitos -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Depósitos Registrados</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Descrição</th>
+                                <th class="table-actions">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="depositosTableBody">
+                            <!-- Dados serão carregados via JavaScript -->
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <div class="loader"></div>
+                                    <p>Carregando depósitos...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyMessage" class="text-center py-4 d-none">
+                    <i class="fas fa-money-bill-wave fa-3x text-muted mb-3"></i>
+                    <p>Nenhum depósito encontrado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Depósito -->
+    <div class="modal fade" id="addDepositoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Novo Depósito</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDepositoForm">
+                        <div class="mb-3">
+                            <label for="valorDepositado" class="form-label">Valor Depositado</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" class="form-control" id="valorDepositado" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dataDeposito" class="form-label">Data do Depósito</label>
+                            <input type="date" class="form-control" id="dataDeposito" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descricaoDeposito" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="descricaoDeposito" rows="3"></textarea>
+                        </div>
+                        <div class="alert alert-danger d-none" id="addDepositoError"></div>
+                        <button type="submit" class="btn btn-orange w-100">Registrar Depósito</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Depósito -->
+    <div class="modal fade" id="editDepositoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Editar Depósito</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editDepositoForm">
+                        <input type="hidden" id="editDepositoId">
+                        <div class="mb-3">
+                            <label for="editValorDepositado" class="form-label">Valor Depositado</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" class="form-control" id="editValorDepositado" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDataDeposito" class="form-label">Data do Depósito</label>
+                            <input type="date" class="form-control" id="editDataDeposito" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescricaoDeposito" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="editDescricaoDeposito" rows="3"></textarea>
+                        </div>
+                        <div class="alert alert-danger d-none" id="editDepositoError"></div>
+                        <button type="submit" class="btn btn-orange w-100">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="deleteDepositoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir este depósito? Esta ação não pode ser desfeita.</p>
+                    <input type="hidden" id="deleteDepositoId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteDeposito">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container para notificações toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 Controle Financeiro de Vistorias Veiculares</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- Scripts personalizados -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/depositos.js"></script>
+</body>
+</html>

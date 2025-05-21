@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de controle financeiro para vistorias veiculares - Resumo Diário">
+    <title>Resumo Diário - Controle Financeiro</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-car-side text-orange me-2"></i>
+                Controle de Vistorias
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="vistorias.html">
+                            <i class="fas fa-clipboard-check me-1"></i> Vistorias
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="depositos.html">
+                            <i class="fas fa-money-bill-wave me-1"></i> Depósitos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="despesas.html">
+                            <i class="fas fa-file-invoice-dollar me-1"></i> Despesas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="resumo-diario.html">
+                            <i class="fas fa-calendar-day me-1"></i> Resumo Diário
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="resumo-mensal.html">
+                            <i class="fas fa-calendar-alt me-1"></i> Resumo Mensal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html">
+                            <i class="fas fa-chart-bar me-1"></i> Relatórios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="btnLogout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sair
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Resumo Diário</h1>
+            <div class="d-flex align-items-center">
+                <input type="date" class="form-control me-2" id="dataResumo">
+                <button class="btn btn-orange" id="btnAtualizarResumo">
+                    <i class="fas fa-sync-alt me-1"></i> Atualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Loader -->
+        <div id="resumoLoader" class="text-center py-5">
+            <div class="loader"></div>
+            <p>Carregando resumo diário...</p>
+        </div>
+
+        <!-- Conteúdo do resumo (inicialmente oculto) -->
+        <div id="resumoContent" class="d-none">
+            <!-- Cards de resumo -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Total do Dia</h5>
+                                <i class="fas fa-money-bill-wave fa-2x text-orange"></i>
+                            </div>
+                            <h2 class="mb-0" id="totalDia">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="totalVistoriasInfo">0 vistorias realizadas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Total em PIX</h5>
+                                <i class="fas fa-qrcode fa-2x text-success"></i>
+                            </div>
+                            <h2 class="mb-0" id="totalPix">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="percentualPix">0% do total</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Total em Dinheiro</h5>
+                                <i class="fas fa-hand-holding-usd fa-2x text-primary"></i>
+                            </div>
+                            <h2 class="mb-0" id="totalDinheiro">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="percentualDinheiro">0% do total</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Total Depositado</h5>
+                                <i class="fas fa-piggy-bank fa-2x text-info"></i>
+                            </div>
+                            <h2 class="mb-0" id="totalDepositado">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="percentualDepositado">0% do dinheiro</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Total em Despesas</h5>
+                                <i class="fas fa-file-invoice-dollar fa-2x text-danger"></i>
+                            </div>
+                            <h2 class="mb-0" id="totalDespesas">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="percentualDespesas">0% do dinheiro</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card dashboard-card h-100 border-0 shadow-sm bg-warning bg-opacity-10">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Falta Depositar</h5>
+                                <i class="fas fa-exclamation-circle fa-2x text-warning"></i>
+                            </div>
+                            <h2 class="mb-0" id="faltaDepositar">R$ 0,00</h2>
+                            <div class="text-muted small mt-2">
+                                <span id="percentualFaltaDepositar">0% do dinheiro</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Distribuição de Receitas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height:300px;">
+                                <canvas id="graficoReceitas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Vistorias por Tipo de Veículo</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height:300px;">
+                                <canvas id="graficoVistorias"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalhamento -->
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Detalhamento de Vistorias</h5>
+                            <span class="badge bg-orange" id="totalVistoriasBadge">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo de Veículo</th>
+                                            <th>Valor</th>
+                                            <th>Método de Pagamento</th>
+                                            <th>Valor PIX</th>
+                                            <th>Valor Dinheiro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaVistorias">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="semVistoriasMsg" class="text-center py-3 d-none">
+                                <i class="fas fa-clipboard-list fa-2x text-muted mb-2"></i>
+                                <p>Nenhuma vistoria encontrada para esta data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Depósitos do Dia</h5>
+                            <span class="badge bg-info" id="totalDepositosBadge">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Valor</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaDepositos">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="semDepositosMsg" class="text-center py-3 d-none">
+                                <i class="fas fa-piggy-bank fa-2x text-muted mb-2"></i>
+                                <p>Nenhum depósito encontrado para esta data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Despesas do Dia</h5>
+                            <span class="badge bg-danger" id="totalDespesasBadge">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Valor</th>
+                                            <th>Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaDespesas">
+                                        <!-- Dados serão carregados via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="semDespesasMsg" class="text-center py-3 d-none">
+                                <i class="fas fa-file-invoice-dollar fa-2x text-muted mb-2"></i>
+                                <p>Nenhuma despesa encontrada para esta data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensagem de nenhum dado -->
+        <div id="semDadosMsg" class="text-center py-5 d-none">
+            <i class="fas fa-calendar-day fa-4x text-muted mb-3"></i>
+            <h3>Nenhum dado encontrado</h3>
+            <p>Não há registros de vistorias, depósitos ou despesas para a data selecionada.</p>
+        </div>
+    </div>
+
+    <!-- Container para notificações toast -->
+    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 Controle Financeiro de Vistorias Veiculares</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <!-- Scripts personalizados -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/resumo-diario.js"></script>
+</body>
+</html>
