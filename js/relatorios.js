@@ -116,23 +116,30 @@ async function carregarDadosRelatorio(periodo) {
         
         if (periodo.tipo === 'diario') {
             // Queries para relatório diário
+            // Corrigido para garantir que a comparação de data funcione corretamente
+            const dataInicio = periodo.data;
+            const dataFim = periodo.data;
+            
             queryVistorias = supabase
                 .from('vistorias')
                 .select('*')
                 .eq('user_id', user.id)
-                .eq('data_vistoria', periodo.data);
+                .gte('data_vistoria', dataInicio)
+                .lte('data_vistoria', dataFim);
                 
             queryDepositos = supabase
                 .from('depositos')
                 .select('*')
                 .eq('user_id', user.id)
-                .eq('data_deposito', periodo.data);
+                .gte('data_deposito', dataInicio)
+                .lte('data_deposito', dataFim);
                 
             queryDespesas = supabase
                 .from('despesas')
                 .select('*')
                 .eq('user_id', user.id)
-                .eq('data_despesa', periodo.data);
+                .gte('data_despesa', dataInicio)
+                .lte('data_despesa', dataFim);
         } else {
             // Queries para relatório mensal
             queryVistorias = supabase
