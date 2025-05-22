@@ -534,9 +534,22 @@ function preencherResumoMensal(dados) {
 
         // Gerar gráficos - com verificação de existência do Chart.js
         if (typeof Chart !== 'undefined') {
-            gerarGraficoReceitas(totais.totalPix, totais.totalDinheiro);
-            gerarGraficoVistorias(totais.contadorCarros, totais.contadorMotos, totais.contadorCaminhoes);
-            gerarGraficoEvolucaoDiaria(dadosEvolucaoDiaria, mes, ano);
+            // Forçar a renderização dos gráficos após um pequeno atraso para garantir que o DOM esteja pronto
+            setTimeout(() => {
+                try {
+                    console.log("Gerando gráfico de receitas com dados:", totais.totalPix, totais.totalDinheiro);
+                    gerarGraficoReceitas(totais.totalPix, totais.totalDinheiro);
+                    
+                    console.log("Gerando gráfico de vistorias com dados:", totais.contadorCarros, totais.contadorMotos, totais.contadorCaminhoes);
+                    gerarGraficoVistorias(totais.contadorCarros, totais.contadorMotos, totais.contadorCaminhoes);
+                    
+                    console.log("Gerando gráfico de evolução diária");
+                    gerarGraficoEvolucaoDiaria(dadosEvolucaoDiaria, mes, ano);
+                } catch (chartError) {
+                    console.error("Erro ao renderizar gráficos:", chartError);
+                    showNotification("Erro ao renderizar gráficos: " + chartError.message, "error");
+                }
+            }, 100);
         } else {
             console.error("Chart.js não está disponível. Os gráficos não serão gerados.");
             showNotification("Erro ao gerar gráficos: Chart.js não está disponível", "error");
@@ -553,6 +566,8 @@ function preencherResumoMensal(dados) {
 // Gerar gráfico de receitas
 function gerarGraficoReceitas(totalPix, totalDinheiro) {
     try {
+        console.log("Iniciando geração do gráfico de receitas com valores:", totalPix, totalDinheiro);
+        
         const ctx = document.getElementById('graficoReceitas');
         if (!ctx) {
             console.warn('Elemento graficoReceitas não encontrado');
@@ -567,6 +582,7 @@ function gerarGraficoReceitas(totalPix, totalDinheiro) {
 
         // Destruir gráfico anterior se existir
         if (window.graficoReceitas) {
+            console.log("Destruindo gráfico de receitas anterior");
             window.graficoReceitas.destroy();
         }
 

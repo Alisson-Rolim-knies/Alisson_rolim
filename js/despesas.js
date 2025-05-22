@@ -119,7 +119,7 @@ async function loadDespesas() {
             return `
                 <tr>
                     <td>${formatDate(despesa.data_despesa)}</td>
-                    <td>${formatCurrency(despesa.valor_despesa)} <span class="badge ${despesa.origem_despesa === 'PIX' ? 'bg-success' : 'bg-primary'}">${despesa.origem_despesa || 'N/A'}</span></td>
+                    <td>${formatCurrency(despesa.valor_despesa)} <span class="badge bg-primary">Dinheiro</span></td>
                     <td>${despesa.descricao || '-'}</td>
                     <td class="table-actions">
                         <button class="btn btn-sm btn-primary" onclick="openEditModal('${despesa.id}')">
@@ -155,7 +155,6 @@ async function handleAddDespesa(e) {
     
     const valorDespesa = parseFloat(document.getElementById('valorDespesa').value);
     const dataDespesa = document.getElementById('dataDespesa').value;
-    const origemDespesa = document.getElementById('origemDespesa').value;
     const descricao = document.getElementById('descricaoDespesa').value;
     const errorElement = document.getElementById('addDespesaError');
     
@@ -164,7 +163,7 @@ async function handleAddDespesa(e) {
         errorElement.classList.add('d-none');
         
         // Validar campos
-        if (isNaN(valorDespesa) || valorDespesa <= 0 || !dataDespesa || !origemDespesa) {
+        if (isNaN(valorDespesa) || valorDespesa <= 0 || !dataDespesa) {
             errorElement.textContent = 'Preencha todos os campos obrigatórios corretamente.';
             errorElement.classList.remove('d-none');
             return;
@@ -174,7 +173,7 @@ async function handleAddDespesa(e) {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) throw new Error('Usuário não autenticado');
         
-        // Inserir despesa
+        // Inserir despesa - removendo o campo origem_despesa que está causando o erro
         const { data, error } = await supabase
             .from('despesas')
             .insert([
@@ -182,7 +181,6 @@ async function handleAddDespesa(e) {
                     user_id: user.id,
                     valor_despesa: valorDespesa,
                     data_despesa: dataDespesa,
-                    origem_despesa: origemDespesa,
                     descricao: descricao
                 }
             ]);
@@ -226,7 +224,6 @@ async function openEditModal(id) {
         document.getElementById('editDespesaId').value = despesa.id;
         document.getElementById('editValorDespesa').value = despesa.valor_despesa;
         document.getElementById('editDataDespesa').value = despesa.data_despesa;
-        document.getElementById('editOrigemDespesa').value = despesa.origem_despesa || 'Dinheiro';
         document.getElementById('editDescricaoDespesa').value = despesa.descricao || '';
         
         // Abrir modal
@@ -246,7 +243,6 @@ async function handleEditDespesa(e) {
     const id = document.getElementById('editDespesaId').value;
     const valorDespesa = parseFloat(document.getElementById('editValorDespesa').value);
     const dataDespesa = document.getElementById('editDataDespesa').value;
-    const origemDespesa = document.getElementById('editOrigemDespesa').value;
     const descricao = document.getElementById('editDescricaoDespesa').value;
     const errorElement = document.getElementById('editDespesaError');
     
@@ -255,28 +251,40 @@ async function handleEditDespesa(e) {
         errorElement.classList.add('d-none');
         
         // Validar campos
-        if (isNaN(valorDespesa) || valorDespesa <= 0 || !dataDespesa || !origemDespesa) {
+        if (isNaN(valorDespesa) || valorDespesa <= 0 || !dataDespesa) {
             errorElement.textContent = 'Preencha todos os campos obrigatórios corretamente.';
             errorElement.classList.remove('d-none');
             return;
         }
         
-        // Atualizar despesa
+        // Obter usuário atual para garantir que a atualização seja feita apenas em registros do usuário
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('Usuário não autenticado');
+        
+        // Atualizar despesa - removendo o campo origem_despesa que está causando o erro
         const { data, error } = await supabase
             .from('despesas')
             .update({
                 valor_despesa: valorDespesa,
                 data_despesa: dataDespesa,
-                origem_despesa: origemDespesa,
                 descricao: descricao
             })
-            .eq('id', id);
+            .eq('id', id)
+            .eq('user_id', user.id); // Garantir que a despesa pertence ao usuário atual
         
         if (error) throw error;
         
         // Fechar modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('editDespesaModal'));
-        modal.hide();
+        if (modal) {
+            modal.hide();
+        } else {
+            // Caso o modal não seja encontrado, fechar manualmente
+            document.getElementById('editDespesaModal').classList.remove('show');
+            document.body.classList.remove('modal-open');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+        }
         
         // Mostrar notificação
         showNotification('Despesa atualizada com sucesso!');
