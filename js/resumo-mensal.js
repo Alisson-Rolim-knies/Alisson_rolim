@@ -409,6 +409,13 @@ function preencherResumoMensal(dados) {
     document.getElementById('totalMes').textContent = formatCurrency(totais.totalMes);
     document.getElementById('totalVistoriasInfo').textContent = `${totais.totalVistorias} vistoria${totais.totalVistorias !== 1 ? 's' : ''} realizada${totais.totalVistorias !== 1 ? 's' : ''}`;
     
+    // Adicionar lucro estimado
+    if (document.getElementById('lucroEstimado')) {
+        const lucroEstimado = totais.totalMes - totais.totalDespesas;
+        document.getElementById('lucroEstimado').textContent = formatCurrency(lucroEstimado);
+        document.getElementById('totalVistoriasCount').textContent = `${totais.totalVistorias} vistoria${totais.totalVistorias !== 1 ? 's' : ''}`;
+    }
+    
     document.getElementById('totalPix').textContent = formatCurrency(totais.totalPix);
     document.getElementById('percentualPix').textContent = `${totais.percentualPix.toFixed(1)}% do total`;
     
@@ -438,8 +445,13 @@ function gerarGraficoReceitas(totalPix, totalDinheiro) {
     const ctx = document.getElementById('graficoReceitas').getContext('2d');
     
     // Destruir gráfico anterior se existir
-    if (window.graficoReceitas && typeof window.graficoReceitas.destroy === 'function') {
-        window.graficoReceitas.destroy();
+    try {
+        if (window.graficoReceitas && typeof window.graficoReceitas.destroy === 'function') {
+            window.graficoReceitas.destroy();
+        }
+    } catch (error) {
+        console.log('Erro ao destruir gráfico anterior:', error);
+        // Continuar mesmo se houver erro
     }
     
     // Criar novo gráfico
@@ -489,8 +501,13 @@ function gerarGraficoVistorias(carros, motos, caminhoes) {
     const ctx = document.getElementById('graficoVistorias').getContext('2d');
     
     // Destruir gráfico anterior se existir
-    if (window.graficoVistorias && typeof window.graficoVistorias.destroy === 'function') {
-        window.graficoVistorias.destroy();
+    try {
+        if (window.graficoVistorias && typeof window.graficoVistorias.destroy === 'function') {
+            window.graficoVistorias.destroy();
+        }
+    } catch (error) {
+        console.log('Erro ao destruir gráfico anterior:', error);
+        // Continuar mesmo se houver erro
     }
     
     // Criar novo gráfico
@@ -558,8 +575,13 @@ function gerarGraficoEvolucaoDiaria(dados, mes, ano) {
     const ctx = document.getElementById('graficoEvolucaoDiaria').getContext('2d');
     
     // Destruir gráfico anterior se existir
-    if (window.graficoEvolucaoDiaria && typeof window.graficoEvolucaoDiaria.destroy === 'function') {
-        window.graficoEvolucaoDiaria.destroy();
+    try {
+        if (window.graficoEvolucaoDiaria && typeof window.graficoEvolucaoDiaria.destroy === 'function') {
+            window.graficoEvolucaoDiaria.destroy();
+        }
+    } catch (error) {
+        console.log('Erro ao destruir gráfico anterior:', error);
+        // Continuar mesmo se houver erro
     }
     
     // Obter nome do mês

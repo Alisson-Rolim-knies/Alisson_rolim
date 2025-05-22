@@ -12,14 +12,26 @@ function formatCurrency(value) {
 
 // Formatação de data
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR');
+    // Evitar conversão para UTC que pode causar deslocamento de dia
+    // Tratar a data como string pura no formato YYYY-MM-DD
+    if (!dateString) return '';
+    
+    // Dividir a string de data em partes
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return dateString; // Retornar original se formato não for YYYY-MM-DD
+    
+    // Formatar manualmente para DD/MM/YYYY
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 // Obter data atual no formato YYYY-MM-DD
 function getCurrentDate() {
     const now = new Date();
-    return now.toISOString().split('T')[0];
+    // Ajuste para garantir que a data local seja usada, sem conversão para UTC
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 // Função para mostrar notificações
