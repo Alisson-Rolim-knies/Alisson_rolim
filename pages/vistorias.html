@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -158,7 +160,8 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title">Nova Vistoria</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addVistoriaForm">
@@ -169,6 +172,7 @@
                                 <option value="carro">Carro (R$ 230,00)</option>
                                 <option value="moto">Moto (R$ 190,00)</option>
                                 <option value="caminhao">Caminhão (R$ 280,00)</option>
+                                <option value="caminhao">Retorno (R$ 00,00)</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -180,7 +184,7 @@
                                 <option value="Misto">Misto (Dinheiro + PIX)</option>
                             </select>
                         </div>
-                        
+
                         <!-- Campos para valores de PIX e Dinheiro (visíveis apenas quando Misto for selecionado) -->
                         <div id="valoresMistoContainer" class="d-none">
                             <div class="row mb-3">
@@ -200,7 +204,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="dataVistoria" class="form-label">Data da Vistoria</label>
                             <input type="date" class="form-control" id="dataVistoria" required>
@@ -223,7 +227,8 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title">Editar Vistoria</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editVistoriaForm">
@@ -235,6 +240,7 @@
                                 <option value="carro">Carro (R$ 230,00)</option>
                                 <option value="moto">Moto (R$ 190,00)</option>
                                 <option value="caminhao">Caminhão (R$ 280,00)</option>
+                                <option value="retorno">Retorno (R$ 00,00)</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -244,9 +250,10 @@
                                 <option value="Dinheiro">Dinheiro</option>
                                 <option value="PIX">PIX</option>
                                 <option value="Misto">Misto (Dinheiro + PIX)</option>
+                                <option value="Retorno">Retorno</option>
                             </select>
                         </div>
-                        
+
                         <!-- Campos para valores de PIX e Dinheiro (visíveis apenas quando Misto for selecionado) -->
                         <div id="editValoresMistoContainer" class="d-none">
                             <div class="row mb-3">
@@ -256,7 +263,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="editValorDinheiro" class="form-label">Valor em Dinheiro (R$)</label>
-                                    <input type="number" class="form-control" id="editValorDinheiro" step="0.01" min="0">
+                                    <input type="number" class="form-control" id="editValorDinheiro" step="0.01"
+                                        min="0">
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -266,7 +274,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="editDataVistoria" class="form-label">Data da Vistoria</label>
                             <input type="date" class="form-control" id="editDataVistoria" required>
@@ -289,7 +297,8 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Tem certeza que deseja excluir esta vistoria? Esta ação não pode ser desfeita.</p>
@@ -323,4 +332,5 @@
     <script src="../js/auth.js"></script>
     <script src="../js/vistorias.js"></script>
 </body>
+
 </html>
